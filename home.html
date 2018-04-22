@@ -1,0 +1,81 @@
+
+<html>
+  <head>
+    <title>MAPS PLUGIN</title>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+    <meta charset="utf-8">
+    <style>
+      #map {
+        height: 50%;
+        width: 50% ;
+      }
+      html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
+      #floating-panel {
+        position: absolute;
+        top: 10px;
+        left: 25%;
+        z-index: 5;
+        background-color: #fff;
+        padding: 5px;
+        border: 1px solid #999;
+        text-align: center;
+        font-family: 'Roboto','sans-serif';
+        line-height: 30px;
+        padding-left: 10px;
+      }
+    </style>
+   
+  </head>
+  <body>
+    <div id="floating-panel">
+      <input id="address" type="textbox" value="ENTER YOUR AREA">
+      <input id="submit" type="button" value="GO">
+    </div>
+    <div id="map"></div>
+
+
+
+  <script>
+  	      function initMap() {
+        var map = new google.maps.Map(document.getElementById('map'), {
+          zoom: 15,
+          center: {lat: 28.7041, lng: 77.1025}
+        });
+        var geocoder = new google.maps.Geocoder();
+
+        document.getElementById('submit').addEventListener('click', function() {
+          geocodeAddress(geocoder, map);
+        });
+      }
+
+      function geocodeAddress(geocoder, resultsMap) {
+        var address = document.getElementById('address').value;
+        geocoder.geocode({'address': address}, function(results, status) {
+          if (status === 'OK') {
+            resultsMap.setCenter(results[0].geometry.location);
+            var coords = results[0].geometry.location;
+
+            var marker = new google.maps.Marker({
+              map: resultsMap,
+              position: results[0].geometry.location
+            });
+            getCoords(coords);
+          } else {
+            alert('Geocode was not successful for the following reason: ' + status);
+          }
+        });
+      }
+    </script>
+
+	<script type="text/javascript" src="json_parser.js"></script>
+    <script  type="text/javascript" src="jquery-3.1.0.min.js"></script>
+    <script async defer
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAVZSCfOQdgxh1op3CrBevS7w9yiX-2lzg&callback=initMap">
+    </script>
+  </body>
+</html>
+
